@@ -1,7 +1,7 @@
 [tool.black]
 line-length = 120
 target-version = ["py310"]
-skip-string-normalization = true  # leave quote style alone, Ruff will handle
+skip-string-normalization = true  # keep quotes untouched, Ruff handles style
 
 [tool.ruff]
 line-length = 120
@@ -9,9 +9,12 @@ target-version = "py310"
 
 # Enable rulesets (E=pycodestyle, F=pyflakes, W=warnings, C=convention, Q=quotes)
 select = ["E", "F", "W", "C", "Q"]
-ignore = ["E203", "W503"]  # handled by Black
 
-# Allow auto-fixes
+# Only ignore W503 (Black prefers line break after binary operator).
+# Let Ruff handle E203 auto-fix instead of ignoring it.
+ignore = ["W503"]
+
+# Enable auto-fixes
 fix = true
 unsafe-fixes = true
 

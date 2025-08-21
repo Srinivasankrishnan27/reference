@@ -1,0 +1,41 @@
+[tool.black]
+line-length = 120
+target-version = ["py310"]
+skip-string-normalization = true  # keeps single vs double quotes as you write
+
+[tool.isort]
+profile = "black"
+line_length = 120
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+combine_as_imports = true
+
+[tool.flake8]
+max-line-length = 120
+ignore = [
+    "E203",  # whitespace before ':', handled by Black
+    "W503",  # line break before binary operator, handled by Black
+]
+max-complexity = 10
+select = ["E", "F", "W", "C90"]
+
+[tool.pylint]
+max-line-length = 120
+disable = [
+    "C0114",  # missing-module-docstring
+    "C0115",  # missing-class-docstring
+    "C0116",  # missing-function-docstring
+]
+good-names = ["i", "j", "k", "ex", "Run", "_"]
+
+[tool.mypy]
+python_version = "3.10"
+check_untyped_defs = true
+disallow_untyped_defs = true
+ignore_missing_imports = true
+warn_unused_ignores = true
+warn_return_any = true
+warn_redundant_casts = true
+warn_unreachable = true
+strict_optional = true

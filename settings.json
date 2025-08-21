@@ -1,23 +1,23 @@
 {
-  // Black formatter settings
+  // Black formatter
   "python.formatting.provider": "black",
   "python.formatting.blackArgs": [
     "--line-length=120",
     "--skip-string-normalization"
   ],
 
-  // Run format + lint on save
+  // Auto format + lint + fix on save
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
     "source.fixAll": true,
     "source.organizeImports": true
   },
 
-  // Ruff integration (VS Code extension: charliermarsh.ruff)
+  // Ruff integration (install extension: charliermarsh.ruff)
   "ruff.enable": true,
   "ruff.lint.run": "onSave",
   "ruff.lint.args": ["--fix"],
 
-  // Optional: show type errors inline
+  // Mypy for type checking
   "python.linting.mypyEnabled": true
 }

@@ -1,33 +1,24 @@
 [tool.black]
 line-length = 120
 target-version = ["py310"]
-skip-string-normalization = true  # keeps single vs double quotes as you write
+skip-string-normalization = true  # leave quote style alone, Ruff will handle
 
-[tool.isort]
-profile = "black"
-line_length = 120
-multi_line_output = 3
-include_trailing_comma = true
-force_grid_wrap = 0
-combine_as_imports = true
+[tool.ruff]
+line-length = 120
+target-version = "py310"
 
-[tool.flake8]
-max-line-length = 120
-ignore = [
-    "E203",  # whitespace before ':', handled by Black
-    "W503",  # line break before binary operator, handled by Black
-]
-max-complexity = 10
-select = ["E", "F", "W", "C90"]
+# Enable rulesets (E=pycodestyle, F=pyflakes, W=warnings, C=convention, Q=quotes)
+select = ["E", "F", "W", "C", "Q"]
+ignore = ["E203", "W503"]  # handled by Black
 
-[tool.pylint]
-max-line-length = 120
-disable = [
-    "C0114",  # missing-module-docstring
-    "C0115",  # missing-class-docstring
-    "C0116",  # missing-function-docstring
-]
-good-names = ["i", "j", "k", "ex", "Run", "_"]
+# Allow auto-fixes
+fix = true
+unsafe-fixes = true
+
+[tool.ruff.lint.flake8-quotes]
+inline-quotes = "single"
+multiline-quotes = "double"
+docstring-quotes = "double"
 
 [tool.mypy]
 python_version = "3.10"

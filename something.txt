@@ -1,0 +1,106 @@
+USER_PROMPT_TEMPLATE = """
+You will evaluate a generated text against a reference text.
+
+First, internally perform THREE independent evaluation passes.
+In each pass, judge the text independently.
+Then internally reconcile differences and produce final scores.
+
+Do NOT reveal intermediate reasoning.
+Only output the final reconciled scores.
+
+--------------------------------------------------
+SCORING EXAMPLES (CALIBRATION)
+--------------------------------------------------
+
+Example 1:
+Reference:
+"John worked at ABC Corp from 2015 to 2020 as a software engineer."
+
+Generated:
+"John was employed at ABC Corp as a software engineer."
+
+Expected Scores:
+{
+  "coverage": 0.7,
+  "faithfulness": 0.95,
+  "clarity": 0.9,
+  "coherence": 0.9,
+  "confidence": 0.9
+}
+
+Rationale (internal):
+Missing time period → lower coverage, but factually correct.
+
+---
+
+Example 2:
+Reference:
+"Mary owns 60% of XYZ Ltd and receives annual dividends."
+
+Generated:
+"Mary owns XYZ Ltd and receives a salary."
+
+Expected Scores:
+{
+  "coverage": 0.4,
+  "faithfulness": 0.3,
+  "clarity": 0.8,
+  "coherence": 0.8,
+  "confidence": 0.95
+}
+
+Rationale (internal):
+Ownership distorted, dividends replaced by salary.
+
+---
+
+Example 3:
+Reference:
+"Company revenue increased from $1M to $2M in 2022."
+
+Generated:
+"The company doubled its revenue in 2022, growing from $1M to $2M."
+
+Expected Scores:
+{
+  "coverage": 1.0,
+  "faithfulness": 1.0,
+  "clarity": 0.9,
+  "coherence": 0.9,
+  "confidence": 0.95
+}
+
+--------------------------------------------------
+EVALUATION TASK
+--------------------------------------------------
+
+Reference text:
+---
+{reference}
+---
+
+Generated text:
+---
+{generated}
+---
+
+Evaluate the generated text on the following dimensions.
+Each score must be between 0.0 and 1.0.
+
+Return JSON ONLY in this exact format:
+
+{
+  "coverage": <float>,
+  "faithfulness": <float>,
+  "clarity": <float>,
+  "coherence": <float>,
+  "confidence": <float>
+}
+
+Definitions:
+- coverage: completeness compared to reference
+- faithfulness: factual accuracy and consistency
+- clarity: readability and wording quality
+- coherence: logical flow and structure
+- confidence: how confident you are in your scores
+"""

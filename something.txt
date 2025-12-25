@@ -1,20 +1,11 @@
-from typing import Dict, Type
-from evaluators.base import BaseEvaluator
+from evaluators.registry import EvaluatorRegistry
+from evaluators.dummy.always_one import AlwaysOneEvaluator
 
 
-class EvaluatorRegistry:
-    def __init__(self):
-        self._registry: Dict[str, Type[BaseEvaluator]] = {}
+def build_registry() -> EvaluatorRegistry:
+    registry = EvaluatorRegistry()
 
-    def register(self, evaluator_cls: Type[BaseEvaluator]):
-        name = evaluator_cls.name
-        if not name:
-            raise ValueError("Evaluator must define a name")
+    # Dummy evaluator (for now)
+    registry.register(AlwaysOneEvaluator)
 
-        self._registry[name] = evaluator_cls
-
-    def get(self, name: str):
-        return self._registry.get(name)
-
-    def all(self):
-        return self._registry
+    return registry

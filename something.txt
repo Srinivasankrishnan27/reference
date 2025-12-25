@@ -1,11 +1,29 @@
-from evaluators.registry import EvaluatorRegistry
-from evaluators.dummy.always_one import AlwaysOneEvaluator
+from typing import Dict
 
 
-def build_registry() -> EvaluatorRegistry:
-    registry = EvaluatorRegistry()
+class Aggregator:
+    @staticmethod
+    def aggregate(
+        scores: Dict[str, float],
+        weights: Dict[str, float]
+    ) -> float:
+        """
+        Weighted mean aggregation.
+        Missing scores are ignored.
+        """
 
-    # Dummy evaluator (for now)
-    registry.register(AlwaysOneEvaluator)
+        total_weight = 0.0
+        weighted_sum = 0.0
 
-    return registry
+        for method, score in scores.items():
+            weight = weights.get(method)
+            if weight is None:
+                continue
+
+            weighted_sum += score * weight
+            total_weight += weight
+
+        if total_weight == 0:
+            return 0.0
+
+        return round(weighted_sum / total_weight, 4)

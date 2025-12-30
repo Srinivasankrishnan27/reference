@@ -1,0 +1,17 @@
+embedding:
+  base_url: "https://api.openai.com/v1"
+  api_key: "${OPENAI_API_KEY}"
+  model_name: "text-embedding-3-large"
+  timeout: 30
+
+llm_judge:
+  base_url: "https://api.openai.com/v1"
+  api_key: "${OPENAI_API_KEY}"
+  model_name: "gpt-4.1"
+  temperature: 0.0
+
+# ROUGE can ignore any kwargs
+rouge1: {}
+rouge2: {}
+rougeL: {}
+rougeLsum: {}

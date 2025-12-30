@@ -2,16 +2,24 @@ import yaml
 import asyncio
 from registry import REGISTRY
 from aggregator import Aggregator
+from runtime_config import load_runtime_config
 import evaluators  # triggers registration
 
 
-async def run_pipeline(generated: str, reference: str, config_path="config.yaml"):
+async def run_pipeline(
+    generated: str,
+    reference: str,
+    config_path="config.yaml",
+    runtime_config_path="runtime_config.yaml",
+):
+    # Load configs
     with open(config_path) as f:
-        config = yaml.safe_load(f)
+        eval_config = yaml.safe_load(f)
 
+    runtime_cfg = load_runtime_config(runtime_config_path)
     results = {}
 
-    for category, methods in config.get("evaluators", {}).items():
+    for category, methods in eval_config.get("evaluators", {}).items():
         if not isinstance(methods, dict):
             print(f"[WARN] methods for {category} must be a mapping")
             continue
@@ -27,9 +35,11 @@ async def run_pipeline(generated: str, reference: str, config_path="config.yaml"
                 print(f"[WARN] Evaluator not registered: {category}.{method}")
                 continue
 
-            evaluator = factory()
-            score = await evaluator.evaluate(generated, reference)
+            # Inject runtime config generically
+            kwargs = runtime_cfg.get(method, {})
+            evaluator = factory(**kwargs)
 
+            score = await evaluator.evaluate(generated, reference)
             scores[method] = score
             weights[method] = weight
 
